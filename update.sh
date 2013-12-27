@@ -1,6 +1,11 @@
 #!/bin/bash
-bumpversion minor
+if [[ -z "$1" ]]
+    PATCHLEVEL=$1
+else
+    PATCHLEVEL=minor
+fi
+bumpversion $PATCHLEVEL
 git push
 git push --tags
-python setup.py sdist
-python setup.py bdist_wheel
+python setup.py sdist upload
+python setup.py bdist_wheel upload
