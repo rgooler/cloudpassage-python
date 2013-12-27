@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ -z "$1" ]]
+if [[ -z "$1" ]]; then
     PATCHLEVEL=$1
 else
     PATCHLEVEL=minor
