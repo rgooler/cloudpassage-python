@@ -1,8 +1,8 @@
 #!/bin/bash
 if [[ -z "$1" ]]; then
-    PATCHLEVEL=$1
-else
     PATCHLEVEL=minor
+else
+    PATCHLEVEL=$1
 fi
 bumpversion $PATCHLEVEL
 git push
