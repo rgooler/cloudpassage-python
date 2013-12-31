@@ -21,6 +21,7 @@ setup(
     author='Ryan Gooler',
     author_email='ryan.gooler@gmail.com',
     py_modules=['cloudpassage'],
+    install-requires = ['requests>=2.1.0'],
     include_package_data=True,
     classifiers=[
         'Development Status :: 3 - Alpha',
