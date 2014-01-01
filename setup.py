@@ -13,7 +13,7 @@ def read(*paths):
 setup(
     name='cloudpassage',
     packages= ['cloudpassage'],
-    version='0.4.0',
+    version='0.5.0',
     description='A simple python interface to the CloudPassage API',
     long_description=(read('README.rst') + '\n\n' +
                       read('HISTORY.rst') + '\n\n' +
