@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 import os
-
-from setuptools import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 def read(*paths):
     """Build a file path from *paths* and return the contents."""
@@ -21,7 +23,7 @@ setup(
     author='Ryan Gooler',
     author_email='ryan.gooler@gmail.com',
     py_modules=['cloudpassage'],
-    install-requires = ['requests>=2.1.0'],
+    install_requires=['requests >= 2.1.0'],
     include_package_data=True,
     classifiers=[
         'Development Status :: 3 - Alpha',
