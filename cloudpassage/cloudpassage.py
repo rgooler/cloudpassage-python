@@ -3,6 +3,7 @@ import requests
 from json import dumps
 from base64 import urlsafe_b64encode as b64encode
 from datetime import datetime, timedelta
+import httplib
 
 
 class CloudPassageError(Exception):
@@ -117,6 +118,8 @@ class CloudPassage:
         return self.__parserequest(req)
 
     def __parserequest(self, req):
+        if httplib.HTTPConnection.debuglevel > 0:
+            print 'body:', req.text
         req.raise_for_status()
         json = req.json()
         if u'error' in json:
