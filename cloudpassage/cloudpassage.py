@@ -40,6 +40,9 @@ class Token(str):
 
     def __post(self, endpoint, data=None, headers=None):
         url = self.baseurl + endpoint
+        if headers is None:
+            headers = {}
+        headers['Content-Type'] = 'application/json'
         req = requests.post(url, data=data, headers=headers)
         req.raise_for_status()
         json = req.json()
@@ -112,7 +115,8 @@ class CloudPassage:
         if data:
             # Convert data to properly-formatted json before posting
             data = dumps(data)
-        headers = {'Authorization': 'Bearer %s' % self.token}
+        headers = {'Authorization': 'Bearer %s' % self.token,
+                   'Content-Type': 'application/json'}
         url = self.baseurl + endpoint
         req = requests.post(url, data=data, headers=headers)
         return self.__parserequest(req)
