@@ -104,17 +104,24 @@ class CloudPassage:
     def __parserequest(self, req):
         if httplib.HTTPConnection.debuglevel > 0:
             print 'body:', req.text
-        req.raise_for_status()
-        json = req.json()
+        try:
+            json = req.json()
+        except:
+            req.raise_for_status()
+            return None
+
         if u'error' in json:
             if json[u'error'] == u'invalid_client':
                 raise InvalidClientError(json['error_description'])
-            if json[u'message'] == u'Validation Failed':
-                for error in json.errors:
-                    raise ValidationFailedError(error['details'])
             else:
                 raise CloudPassageError(json['error'],
                                         json['error_description'])
+        elif u'errors' in json:
+            for error in json['errors']:
+                if json['message'] == 'Validation Failed':
+                    raise ValidationFailedError(error['details'])
+                else:
+                    raise CloudPassageError(json['message'], error['details'])
         return json
 
     def list_users(self):
@@ -156,7 +163,6 @@ class CloudPassage:
         for k, v in kwargs.items():
             body['group'][k] = v
 
-        print body
         return self.__post('/v1/groups', body)
 
     def update_server_group(self, gid, **kwargs):
