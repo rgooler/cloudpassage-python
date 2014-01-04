@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 __author__ = 'Ryan Gooler'
-__version__ = '0.5.1'
+__version__ = '0.5.2'
 __license__ = 'MIT'
 
 from cloudpassage.cloudpassage import *
