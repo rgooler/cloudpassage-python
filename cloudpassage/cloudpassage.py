@@ -1,34 +1,14 @@
 #!/usr/bin/env python
+from __future__ import absolute_import
 import requests
+import httplib
+import urllib
 from json import dumps
 from base64 import urlsafe_b64encode as b64encode
 from datetime import datetime, timedelta
-import httplib
-
-
-class CloudPassageError(Exception):
-    """Exception raised from the API.
-
-    Attributes:
-        err_type -- input expression in which the error occurred
-        err_desc  -- explanation of the error
-    """
-
-    def __init__(self, err_type, err_desc):
-        self.expr = err_type
-        self.msg = err_desc
-
-
-class InvalidClientError(Exception):
-    """
-    Invalid
-
-    Attributes:
-        msg  -- explanation of the error
-    """
-
-    def __init__(self, msg):
-        self.msg = msg
+from cloudpassage.exceptions import InvalidClientError
+from cloudpassage.exceptions import CloudPassageError
+from cloudpassage.exceptions import ValidationFailedError
 
 
 class Token(str):
@@ -129,6 +109,9 @@ class CloudPassage:
         if u'error' in json:
             if json[u'error'] == u'invalid_client':
                 raise InvalidClientError(json['error_description'])
+            if json[u'message'] == u'Validation Failed':
+                for error in json.errors:
+                    raise ValidationFailedError(error['details'])
             else:
                 raise CloudPassageError(json['error'],
                                         json['error_description'])
@@ -188,3 +171,6 @@ class CloudPassage:
             body['group'][k] = v
 
         return self.__post('/v1/groups/%s' % gid, body)
+
+    def search_server_groups(self, **kwargs):
+        return self._get('/v1/groups?' % urllib.urlencode(kwargs))
