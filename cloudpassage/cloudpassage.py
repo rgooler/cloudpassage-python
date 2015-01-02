@@ -23,7 +23,7 @@ class Token(str):
         if headers is None:
             headers = {}
         headers['Content-Type'] = 'application/json'
-        req = requests.post(url, data=data, headers=headers, verify=False)
+        req = requests.post(url, data=data, headers=headers)
         req.raise_for_status()
         json = req.json()
         if u'error' in json:
@@ -88,7 +88,7 @@ class CloudPassage:
     def __get(self, endpoint):
         headers = {'Authorization': 'Bearer %s' % self.token}
         url = self.baseurl + endpoint
-        req = requests.get(url, headers=headers, verify=False)
+        req = requests.get(url, headers=headers)
         return self.__parserequest(req)
 
     def __post(self, endpoint, data=None):
@@ -98,7 +98,7 @@ class CloudPassage:
         headers = {'Authorization': 'Bearer %s' % self.token,
                    'Content-Type': 'application/json'}
         url = self.baseurl + endpoint
-        req = requests.post(url, data=data, headers=headers, verify=False)
+        req = requests.post(url, data=data, headers=headers)
         return self.__parserequest(req)
 
     def __put(self, endpoint, data=None):
@@ -108,7 +108,7 @@ class CloudPassage:
         headers = {'Authorization': 'Bearer %s' % self.token,
                    'Content-Type': 'application/json'}
         url = self.baseurl + endpoint
-        req = requests.put(url, data=data, headers=headers, verify=False)
+        req = requests.put(url, data=data, headers=headers)
         return self.__parserequest(req)
 
     def __parserequest(self, req):
