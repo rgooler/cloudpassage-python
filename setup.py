@@ -23,7 +23,7 @@ if sys.version_info[0] == 2:
 setup(
     name='cloudpassage',
     packages= ['cloudpassage'],
-    version='0.8.0',
+    version='0.9.0',
     description='A simple python interface to the CloudPassage API',
     long_description=(read('README.rst') + '\n\n' +
                       read('HISTORY.rst') + '\n\n' +
