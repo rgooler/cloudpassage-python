@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import sys
 try:
     from setuptools import setup
 except ImportError:
@@ -9,6 +10,15 @@ def read(*paths):
     """Build a file path from *paths* and return the contents."""
     with open(os.path.join(*paths), 'r') as f:
         return f.read()
+
+install_requires = ['requests >= 2.1.0']
+
+# For SNI support (required by CloudPassage) in Python 2, must install the
+# following packages
+if sys.version_info[0] == 2:
+    install_requires.append('pyOpenSSL >= 0.14')
+    install_requires.append('ndg-httpsclient >= 0.3.3')
+    install_requires.append('pyasn1 >= 0.1.7')
 
 setup(
     name='cloudpassage',
@@ -23,7 +33,7 @@ setup(
     author='Ryan Gooler',
     author_email='ryan.gooler@gmail.com',
     py_modules=['cloudpassage'],
-    install_requires=['requests >= 2.1.0'],
+    install_requires=install_requires,
     include_package_data=True,
     classifiers=[
         'Development Status :: 3 - Alpha',

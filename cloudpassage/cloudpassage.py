@@ -101,6 +101,16 @@ class CloudPassage:
         req = requests.post(url, data=data, headers=headers)
         return self.__parserequest(req)
 
+    def __put(self, endpoint, data=None):
+        if data:
+            # Convert data to properly-formatted json before posting
+            data = dumps(data)
+        headers = {'Authorization': 'Bearer %s' % self.token,
+                   'Content-Type': 'application/json'}
+        url = self.baseurl + endpoint
+        req = requests.put(url, data=data, headers=headers)
+        return self.__parserequest(req)
+
     def __parserequest(self, req):
         if httplib.HTTPConnection.debuglevel > 0:
             print 'body:', req.text
@@ -151,6 +161,13 @@ class CloudPassage:
         """
         return self.__get('/v1/groups/%s' % gid)
 
+    def list_server_group_servers(self, gid, **kwargs):
+        """
+        Returns a list of servers for a single server group specified by group
+        ID.
+        """
+        return self.__get('/v1/groups/%s/servers?%s' % (gid, urllib.urlencode(kwargs)))
+
     def create_server_group(self, name, tag, **kwargs):
         """
         Creates a new server group with default values that you specify, and
@@ -179,4 +196,14 @@ class CloudPassage:
         return self.__post('/v1/groups/%s' % gid, body)
 
     def search_server_groups(self, **kwargs):
-        return self._get('/v1/groups?' % urllib.urlencode(kwargs))
+        return self.__get('/v1/groups?%s' % urllib.urlencode(kwargs))
+
+    def list_servers(self, **kwargs):
+        return self.__get('/v1/servers?%s' % urllib.urlencode(kwargs))
+
+    def get_server(self, sid):
+        return self.__get('/v1/servers/%s' % sid)
+
+    def retire_server(self, sid):
+        data = {"server": {"retire": True}}
+        return self.__put('/v1/servers/%s' % sid, data=data)
